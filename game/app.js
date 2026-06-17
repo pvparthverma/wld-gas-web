@@ -40300,7 +40300,9 @@ function ce_Player() {
     a.$walkFrameDuration = 0.11999999731779099;
     a.$collisionLayer0 = null;
     a.$tempBlockLayer0 = null;
-    a.$acceleration0 = 2.5;
+    a.$xMaxSpeed = 265.0;
+    a.$xAccel = 8000.0;
+    a.$xDecel = 2800.0;
     a.$yVelocity = 0.0;
     a.$xVelocity = 0.0;
     a.$gravity = (-1700.0);
@@ -40324,7 +40326,9 @@ let ce_Player__init_ = ($this, $collisionLayer, $allRunnerEnemiesInp) => {
     $this.$walkPatternidx = 0;
     $this.$walkAnimTimer = 0.0;
     $this.$walkFrameDuration = 0.11999999731779099;
-    $this.$acceleration0 = 2.5;
+    $this.$xMaxSpeed = 265.0;
+    $this.$xAccel = 8000.0;
+    $this.$xDecel = 2800.0;
     $this.$yVelocity = 0.0;
     $this.$xVelocity = 0.0;
     $this.$gravity = (-1700.0);
@@ -40405,7 +40409,7 @@ ce_Player_directionMovingIn = $this => {
     return $returnString;
 },
 ce_Player_update = ($this, $delta) => {
-    let var$2, $oldX, $oldY, $tileWidth, $tileHeight, $moveLeft, $moveRight, var$9, var$10, $anyHit, $e, $ep, var$14, $dir;
+    let var$2, $oldX, $oldY, $tileWidth, $tileHeight, $moveLeft, $moveRight, $decel, var$10, var$11, $anyHit, $e, $ep, var$15, $dir;
     var$2 = jl_Math_min0($delta, 0.03333333507180214);
     $oldX = $this.$sprite.$getX();
     $oldY = $this.$sprite.$getY();
@@ -40413,26 +40417,41 @@ ce_Player_update = ($this, $delta) => {
     $tileHeight = $this.$collisionLayer0.$getTileHeight();
     $moveLeft = cbg_Gdx_input.$isKeyPressed(29);
     $moveRight = cbg_Gdx_input.$isKeyPressed(32);
-    if ($moveLeft) {
-        $this.$xVelocity = $this.$xVelocity - 2.5 * var$2;
-        $this.$facingRight0 = 0;
-    }
-    if ($moveRight) {
-        $this.$xVelocity = $this.$xVelocity + 2.5 * var$2;
-        $this.$facingRight0 = 1;
+    if ($this.$dashFreezeTimer <= 0.0) {
+        if ($moveLeft) {
+            if (!($this.$xVelocity < (-265.0)))
+                $this.$xVelocity = jl_Math_max0((-265.0), $this.$xVelocity - 8000.0 * var$2);
+            else
+                $this.$xVelocity = jl_Math_min0((-265.0), $this.$xVelocity + 2800.0 * var$2);
+            $this.$facingRight0 = 0;
+        }
+        if ($moveRight) {
+            if (!($this.$xVelocity > 265.0))
+                $this.$xVelocity = jl_Math_min0(265.0, $this.$xVelocity + 8000.0 * var$2);
+            else
+                $this.$xVelocity = jl_Math_max0(265.0, $this.$xVelocity - 2800.0 * var$2);
+            $this.$facingRight0 = 1;
+        }
+        if (!$moveLeft && !$moveRight) {
+            $decel = 2800.0 * var$2;
+            if (jl_Math_abs($this.$xVelocity) <= $decel)
+                $this.$xVelocity = 0.0;
+            else
+                $this.$xVelocity = $this.$xVelocity - jl_Math_signum($this.$xVelocity) * $decel;
+        }
     }
     a: {
-        $this.$sprite.$translateX($this.$xVelocity);
-        $this.$xVelocity = $this.$xVelocity * 0.991;
+        $this.$sprite.$translateX($this.$xVelocity * var$2);
         if (!$this.$isColliding($tileWidth, $tileHeight, $this.$sprite, $this.$collisionLayer0)) {
             if ($this.$tempBlockLayer0 === null)
                 break a;
-            var$9 = $this.$sprite;
-            var$10 = $this.$tempBlockLayer0;
-            if (!$this.$isColliding($tileWidth, $tileHeight, var$9, var$10))
+            var$10 = $this.$sprite;
+            var$11 = $this.$tempBlockLayer0;
+            if (!$this.$isColliding($tileWidth, $tileHeight, var$10, var$11))
                 break a;
         }
         $this.$sprite.$setX($oldX);
+        $this.$xVelocity = 0.0;
     }
     if ($this.$dashFreezeTimer > 0.0)
         $this.$dashFreezeTimer = $this.$dashFreezeTimer - var$2;
@@ -40446,8 +40465,8 @@ ce_Player_update = ($this, $delta) => {
             if ($e.$isKilled())
                 continue;
             $ep = $e.$getPos();
-            var$14 = $ep.data;
-            if (($this.$sprite.$getX() - var$14[0]) * ($this.$sprite.$getX() - var$14[0]) + ($this.$sprite.$getY() - var$14[1]) * ($this.$sprite.$getY() - var$14[1]) < 4000.0) {
+            var$15 = $ep.data;
+            if (($this.$sprite.$getX() - var$15[0]) * ($this.$sprite.$getX() - var$15[0]) + ($this.$sprite.$getY() - var$15[1]) * ($this.$sprite.$getY() - var$15[1]) < 4000.0) {
                 $anyHit = 1;
                 $e.$kill();
             }
@@ -40486,11 +40505,11 @@ ce_Player_update = ($this, $delta) => {
         else if ($dir.$contains($rt_s(1069)))
             $this.$yVelocity = $this.$yVelocity - 600.0;
         else if ($dir.$contains($rt_s(738))) {
-            $this.$xVelocity = $this.$xVelocity - 1.5;
-            $this.$dashFreezeTimer = 0.10000000149011612;
+            $this.$xVelocity = (-800.0);
+            $this.$dashFreezeTimer = 0.15000000596046448;
         } else if ($dir.$contains($rt_s(1067))) {
-            $this.$xVelocity = $this.$xVelocity + 1.5;
-            $this.$dashFreezeTimer = 0.10000000149011612;
+            $this.$xVelocity = 800.0;
+            $this.$dashFreezeTimer = 0.15000000596046448;
         }
     }
     $this.$sprite.$translateY($this.$yVelocity * var$2);
