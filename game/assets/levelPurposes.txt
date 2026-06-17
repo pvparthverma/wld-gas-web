@@ -1,0 +1,9 @@
+In total, 20 levels should be in the game
+
+Level 1, 2 - Just jumping and moving around
+Level 3, 4 - Forcing the player to learn how to dash upwards to get up higher and sideways to cross a grap
+Level 5, 6 - Introducing the player to enemies
+Level 7 - Introducing shooting enemies
+Level 8, 9, 10 - Moving + rotating objects
+
+Level 11-20 - Challenges
