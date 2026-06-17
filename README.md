@@ -2,7 +2,7 @@
 
 ## Controls
 
-WASD to move, Space/K to dash, H to hit, and U to skip level.
+WASD to move, Space/K to dash, H to hit, U to skip level, and ESC for volume settings.
 Stopwatch embedded into website to let you keep track of time
 
 ## Description
