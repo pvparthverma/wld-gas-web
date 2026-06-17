@@ -4,18 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+
     <meta property="og:title" content="WLD-GaS Web Port">
     <meta property="og:description" content="Weird Little Dude Gets a Sandwich">
     <meta property="og:image" content="https://gitlab.com/yifeiworld/WLD-GaS/raw/main/game/assets/logo.png">
     <meta property="og:url" content="https://parthv.online/play/">
     <meta property="og:site_name" content="parthv.online">
 
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+
     <title>WLD-GaS Web</title>
 </head>
 <body>
     <h1>Weird Little Dude Gets a Sandwich</h1>
-    <h4>source code: <a href="https://gitlab.com/yifeiworld/WLD-GaS" target="_blank">https://gitlab.com/yifeiworld/WLD-GaS</a></h4>
+    <h4 id="h4text">source code: <a href="https://gitlab.com/yifeiworld/WLD-GaS" target="_blank">https://gitlab.com/yifeiworld/WLD-GaS</a></h4>
+
     <div style="display: flex; justify-content: center; align-items: center; gap: 24px; height: 80vh;">
+    <!-- stopwatch iframe -->
         <iframe
             src="https://www.laurieherault.com/free-notion-widget/stopwatch/embed?title=Stopwatch&color=rgba(0%2C%200%2C%200%2C%201)&textColor=rgb(255%2C%20255%2C%20255)&theme=dark"
             title="Stopwatch"
@@ -23,7 +29,9 @@
             height="150"
             style="border: none;">
         </iframe>
+    <!-- game iframe-->
         <iframe
+            id="game-iframe"
             src="game/index.html"
             title="WLD-GaS"
             width="800"
@@ -31,6 +39,38 @@
             style="border: none;"
             allowfullscreen>
         </iframe>
+
     </div>
+
+    <!-- ua check -->
+    <script>
+        const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+        if (isMobile) {
+            alert("This game is not designed for mobile devices and is best experienced on computers.")
+        }
+    </script>
+    <!-- skip level check -->
+    <script>
+        const game = document.querySelector('#game-iframe');
+        const h4text = document.querySelector('#h4text');
+        function bindIframeKeys() {
+            try {
+                const iframeDoc = game.contentWindow.document;
+                iframeDoc.addEventListener('keydown', (event) => {
+                    if (event.key === 'U' || event.key === 'u') {
+                        h4text.textContent = "player skipped level | source code: https://gitlab.com/yifeiworld/WLD-GaS";
+                    }
+                })
+            } catch (error) {
+                console.error("Error accessing iframe content:", error);
+            }
+        }
+
+        game.addEventListener('load', bindIframeKeys);
+        if (game.contentWindow && game.contentDocument?.readyState === 'complete') {
+            bindIframeKeys();
+        }
+
+    </script>
 </body>
 </html>
