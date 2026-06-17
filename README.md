@@ -15,3 +15,7 @@ I decided to compile this using TeaVM, and embedded the game within an iframe
 
 AI usage was low, just Claude for debugging physics (X-axis movement was awful when building for web, but desktop build would be fine), and the
 Copilot auto-code completion.
+
+## Source Code
+
+This is just the website source code, the game source can be found [here](https://gitlab.com/yifeiworld/WLD-GaS).
