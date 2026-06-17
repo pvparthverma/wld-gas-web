@@ -54,7 +54,8 @@ i:b:/player/walk2.png:2133:1
 i:b:/player/walk3.png:2181:1
 i:b:/player.png:118:1
 i:b:/sandwich.png:5568:1
-i:b:/sounds/aaaa.mp3:23078:1
+i:b:/sounds/aaaa.mp3:17294:1
+i:b:/sounds/cheering.mp3:225335:1
 i:b:/sounds/dash1.mp3:8851:1
 i:b:/sounds/dash2.mp3:13549:1
 i:b:/sounds/dash3.mp3:12982:1
